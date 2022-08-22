@@ -10,13 +10,12 @@ int main(int argc, char *argv[]){
 
 
     int a=0;
-    Lexico lexico;
-
     //lexico.entrada("b aa33.33 1556 275.12 Hola int char float void string class bool +- */ <=>>=< || && ! !=== ; ,"
     //               "() {} = if else while return .632");
 
 
     while(a==0){
+        Lexico lexico;
         string palabra;
         cout<< "\nEscribe algo: ";
         getline(cin,palabra);
