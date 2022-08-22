@@ -27,6 +27,12 @@ public:
  static const int IGUAL=16;
  static const int PALABRESERV=17;
  static const int OPMENOS= 19;
+ static const int OPDIVICION= 20;
+ static const int MODULO = 21;
+ static const int INCREMENTO = 22;
+ static const int DECREMENTO = 23;
+ static const int DIFERENCIA = 24;
+ static const int CORCHETE = 25;
  static const int PESOS= 18;
 };
 

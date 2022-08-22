@@ -34,16 +34,32 @@
                 break;
 
            case TipoSimbolo::OPSUMA:
-                cad= "Op. Suma";
+                cad= "Suma";
+                break;
+
+           case TipoSimbolo::INCREMENTO:
+                cad= "Incremento";
                 break;
 
            case TipoSimbolo::OPMENOS:
-                cad= "Op. resta";
+                cad= "Resta";
+                break;
+
+           case TipoSimbolo::DECREMENTO:
+                cad= "Decremento";
                 break;
 
            case TipoSimbolo::OPMULT:
-                cad= "Op. Multiplicacion";
+                cad= "Multiplicacion";
                 break;
+
+           case TipoSimbolo::OPDIVICION:
+               cad= "Divicion";
+               break;
+
+           case TipoSimbolo::MODULO:
+               cad= "Modulo";
+               break;
 
            case TipoSimbolo::OPRELAC:
                 cad= "Op. Relacional";
@@ -62,7 +78,11 @@
                 break;
 
             case TipoSimbolo::OPIGUALDAD:
-                cad= "Op. Igualdad";
+                cad= "Igualdad";
+                break;
+
+            case TipoSimbolo::DIFERENCIA:
+                cad= "Diferencia";
                 break;
 
             case TipoSimbolo::PUNTOCOMA:
@@ -79,6 +99,10 @@
 
             case TipoSimbolo::LLAVE:
                 cad= "Llave";
+                break;
+
+            case TipoSimbolo::CORCHETE:
+                cad= "Corchete";
                 break;
 
             case TipoSimbolo::IGUAL:
@@ -130,13 +154,19 @@ int Lexico::sigSimbolo(){
                  sigEstado(5);
 
              else if( c == '+')
-                 aceptacion(6);
+                 sigEstado(6);
 
              else if(c == '-')
-                 aceptacion(19);
+                 sigEstado(13);
 
-             else if( c == '*' || c == '/')
+             else if( c == '*')
                  aceptacion(7);
+
+             else if(c == '/')
+                 aceptacion(20);
+
+             else if(c == '%')
+                 aceptacion(21);
 
              else if( c == '<' || c == '>')
                  sigEstado(8);
@@ -165,8 +195,11 @@ int Lexico::sigSimbolo(){
              else if ( c == '{' || c == '}')
                  aceptacion(16);
 
+             else if (c == '[' || c == ']')
+                 aceptacion(25);
+
              else if( c == '$')
-                 aceptacion(23);
+                 aceptacion(50);
 
           break;
         case 1:
@@ -217,6 +250,14 @@ int Lexico::sigSimbolo(){
                   retroceso();
               }
            break;
+        case 6:
+              if(c == '+')
+                  aceptacion(22);
+              else{
+                  estado = 6;
+                  retroceso();
+              }
+            break;
         case 8:
               if( c == '=')
                   aceptacion(8);
@@ -246,7 +287,7 @@ int Lexico::sigSimbolo(){
            break;
         case 11:
                if( c == '=')
-                   aceptacion(12);
+                   aceptacion(24);
                else
                {
                    estado = 11;
@@ -262,6 +303,13 @@ int Lexico::sigSimbolo(){
                  retroceso();
              }
            break;
+        case 13:
+             if(c == '-')
+                 aceptacion(23);
+             else{
+                 estado = 19;
+                 retroceso();
+             }
 
       }
 
@@ -282,10 +330,17 @@ int Lexico::sigSimbolo(){
         case 4:
               if(simbolo == "int" || simbolo == "float" || simbolo == "void" ||
                       simbolo == "char" || simbolo == "string" || simbolo == "bool"
-                      || simbolo == "class")
+                      || simbolo == "class" || simbolo == "double" || simbolo == "struct")
                   tipo= TipoSimbolo::TIPO;
               else if (simbolo == "if" || simbolo == "else" || simbolo == "while"
-                       || simbolo == "return")
+                       || simbolo == "return" || simbolo == "break" || simbolo == "auto"
+                       || simbolo == "case" || simbolo == "const" || simbolo == "continue"
+                       || simbolo == "default" || simbolo == "enum" || simbolo == "extern"
+                       || simbolo == "for" || simbolo == "goto" || simbolo == "do"
+                       || simbolo == "long" || simbolo == "register" || simbolo == "short"
+                       || simbolo == "signed" || simbolo == "sizeof" || simbolo == "static"
+                       || simbolo == "switch" || simbolo == "typedef" || simbolo == "union"
+                       || simbolo == "unsigned" || simbolo == "volatile")
                   tipo= TipoSimbolo::PALABRESERV;
               else
                   tipo= TipoSimbolo::CADENA;
@@ -331,6 +386,24 @@ int Lexico::sigSimbolo(){
              break;
         case 19:
              tipo= TipoSimbolo::OPMENOS;
+             break;
+        case 20:
+             tipo= TipoSimbolo::OPDIVICION;
+             break;
+        case 21:
+             tipo = TipoSimbolo::MODULO;
+             break;
+        case 22:
+             tipo = TipoSimbolo::INCREMENTO;
+             break;
+        case 23:
+             tipo = TipoSimbolo::DECREMENTO;
+             break;
+        case 24:
+             tipo = TipoSimbolo::DIFERENCIA;
+             break;
+        case 25:
+             tipo = TipoSimbolo::CORCHETE;
              break;
         default:
               tipo= TipoSimbolo::PESOS;
